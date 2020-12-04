@@ -1,5 +1,5 @@
 <h3 align="center">aoc</h3>
 
 <p align="center">
-  <b>Solutions to the [Advent of Code :christmas_tree:](https://adventofcode.com/) problems.</b>
+  <b>My solutions to the <a href="https://adventofcode.com/">Advent of Code :christmas_tree:</a> problems.</b>
 </p>
