@@ -136,3 +136,17 @@ dmypy.json
 
 # Cython debug symbols
 cython_debug/
+
+# =============================================================================
+# Advent of Code
+
+# ignore input/output files
+input 
+input.txt
+*.in
+*.out
+
+# ignore files containing sensitive information (session/api tokens)
+.token
+
+# =============================================================================
