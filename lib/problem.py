@@ -108,8 +108,9 @@ class Problem:
             start = time.perf_counter()
             try:
                 out = fn(inp)
-            except Exception as e:
-                traceback.print_exc()
+            except Exception as err:
+                traceback.print_tb(err.__traceback__)
+                out = "FAIL"
             finally:
                 end = time.perf_counter()
 
