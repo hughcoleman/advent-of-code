@@ -4,12 +4,15 @@
 import math
 
 def _gcd(a, b):
+    """ Find the Greatest Common Divisor of two integers a and b. """
     return math.gcd(a, b)
 
 def _lcm(a, b):
+    """ Find the Lowest Common Multiple of two integers a and b. """
     return abs(a*b) // math.gcd(a, b)
 
 def gcd(ns):
+    """ Find the Greatest Common Divisor of a list of integers ns. """
     while len(ns) > 1:
         a, b = ns.pop(), ns.pop()
         while b:
@@ -18,19 +21,21 @@ def gcd(ns):
     return ns[0]
 
 def lcm(ns):
+    """ Find the Lowest Common Multiple of a list of integers ns. """
     while len(ns) > 1:
         a, b = ns.pop(), ns.pop()
         ns.append(_lcm(a, b))
     return ns[0]
 
 def digit_sum(n):
+    """ Recursively compute the digit sum of an integer n. """
     if n < 10:
         return n
     return (n % 10) + digit_sum(n//10)
 
 def factor(n):
+    """ Compute the prime factors of n. """
     factors = {}
-    
     i = 2
     while i**2 <= n:
         if n % i:
@@ -48,6 +53,7 @@ def factor(n):
     
     return factors
 
+# Common number set membership lambdas.
 triangular = lambda n: n in [0, 1] or any(i*(i+1)/2 == n for i in range(n))
 fibonacci  = lambda n: square(5*n*n + 4) or square(5*n*n - 4)
 square     = lambda n: int(math.sqrt(n))**2 == n
