@@ -10,24 +10,49 @@ import pathlib
 from .net import fetch
 
 class Problem:
+    """ class Problem
+    
+    Represents and provides methods relating to a single Advent of Code 
+    problem.
+    """
 
     def __init__(self, *args, **kwargs):
+        """ constructor()
         
+        Pass the year, month, and problem name to the constructor to 
+        instantiate a new Problem.
+
+            Problem("2015/01: Not Quite Lisp")
+            Problem(year=2015, day=1, name="Not Quite Lisp")
+        """
+
         if (match := re.fullmatch(
-            re.compile(r"(?P<year>[0-9]{4})\/(?P<day>0?[1-9]|1[0-9]|2[0-5])\: " + 
+            re.compile(r"(?P<year>[0-9]{4})\/" + 
+                       r"(?P<day>0?[1-9]|1[0-9]|2[0-5])\: " + 
                        r"(?P<name>.+)"), 
             "".join(args)
         )):
             self.year = int(match.group("year"))
             self.day  = int(match.group("day"))
             self.name = str(match.group("name"))
+        elif all(field in kwargs.keys() for field in ["year", "day", "name"]):
+            self.year = int(kwargs.get("year", 0))
+            self.day  = int(kwargs.get("day", 0))
+            self.name = str(kwargs.get("name", "???"))
         else:
-            raise ValueError(f"could not parse arguments to Problem constructor.")
+            raise ValueError("could not parse arguments to Problem " + 
+                             "constructor.")
 
-        self.preprocessor = lambda x: x
+        # the solver functions, and the input preprocessor, are stored as class
+        # fields.
         self.fns = {}
+        self.preprocessor = lambda x: x
 
     def solver(self, part="both"):
+        """ Decorates a function to mark it as a solving method. Optionally
+        specify the part being solved using the `part` keyword argument.
+        """
+
         def register(fn):
             # register the solver function in the instance dictionary variable 
             # `self.fns`.
@@ -37,6 +62,8 @@ class Problem:
         return register
 
     def solve(self):
+        """ Run the solver functions and pretty-print the output. """
+
         # print a neat little header for the problem
         print(f"--- Day {self.day}: {self.name} ---")
 
@@ -87,7 +114,9 @@ class Problem:
 
             # fetch input from the server
             response = fetch(
-                "https://adventofcode.com/{}/day/{}/input".format(self.year, self.day),
+                "https://adventofcode.com/{}/day/{}/input".format(
+                    self.year, self.day
+                ),
                 headers={
                     "Cookie": f"session={token};",
                     "User-Agent": "python"
