@@ -15,7 +15,7 @@ class Problem:
         
         if (match := re.fullmatch(
             re.compile(r"(?P<year>[0-9]{4})\/(?P<day>0?[1-9]|1[0-9]|2[0-5])\: " + 
-                       r"(?P<name>[\w ]*)"), 
+                       r"(?P<name>.+)"), 
             "".join(args)
         )):
             self.year = int(match.group("year"))
