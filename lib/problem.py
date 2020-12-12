@@ -57,7 +57,11 @@ class Problem:
             delta = dt.datetime(self.year, 12, self.day, tzinfo=est) -\
                     dt.datetime.now(tz=est)
             
-            if delta > dt.timedelta(0):
+            if dt.timedelta(seconds=0) < delta <= dt.timedelta(seconds=15):
+                print("Less than fifteen seconds remaining, will sleep...")
+                time.sleep(delta.seconds + 1)
+
+            elif delta > dt.timedelta(seconds=0):
                 # determine time remaining until unlock and display a formatted
                 # countdown timer
                 d =  delta.days
