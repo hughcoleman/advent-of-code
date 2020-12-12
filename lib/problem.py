@@ -6,7 +6,6 @@ import re
 import time
 import datetime as dt
 import pathlib
-import traceback
 
 from .net import fetch
 
@@ -108,21 +107,16 @@ class Problem:
         inp = self.preprocessor(inp)
         
         for part, fn in self.fns.items():
-            # run the solver and time the runtime
+            # run the solver on the input and time the runtime
             start = time.perf_counter()
-            try:
-                out = fn(inp)
-            except Exception as err:
-                traceback.print_tb(err.__traceback__)
-                out = "FAIL"
-            finally:
-                end = time.perf_counter()
+            out   = fn(inp)
+            end   = time.perf_counter()
 
-                # compute runtime and appropriate time unit
-                delta, unit = (end - start), 0
-                while delta < 1 and unit <= 3:
-                    delta, unit = 1000 * delta, unit + 1
-                delta, unit = round(delta, 5), ["s", "ms", "us", "ns"][unit]
+            # compute runtime and appropriate time unit
+            delta, unit = (end - start), 0
+            while delta < 1 and unit <= 3:
+                delta, unit = 1000 * delta, unit + 1
+            delta, unit = round(delta, 5), ["s", "ms", "us", "ns"][unit]
 
             # print answers
             if (part in ["both"]) and (type(out) is tuple) and (len(out) >= 2):
