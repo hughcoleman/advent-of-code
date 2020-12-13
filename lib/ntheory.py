@@ -2,6 +2,7 @@
 # -*- coding: utf-8 -*-
 
 import math
+import functools
 
 def _gcd(a, b):
     """ Find the Greatest Common Divisor of two integers a and b. """
@@ -20,6 +21,13 @@ def gcd(ns):
         ns.append(a)
     return ns[0]
 
+def egcd(a, b):
+    if a == 0:
+        return (b, 0, 1)
+    else:
+        g, y, x = egcd(b % a, a)
+        return (g, x - (b // a) * y, y)
+
 def lcm(ns):
     """ Find the Lowest Common Multiple of a list of integers ns. """
     while len(ns) > 1:
@@ -27,11 +35,22 @@ def lcm(ns):
         ns.append(_lcm(a, b))
     return ns[0]
 
-def digit_sum(n):
-    """ Recursively compute the digit sum of an integer n. """
-    if n < 10:
-        return n
-    return (n % 10) + digit_sum(n//10)
+def modinv(a, m):
+    """ Compute the modular multiplicative inverse of a mod m. """
+    g, x, y = egcd(a, m)
+    if g != 1:
+        raise Exception(f"modular inverse of {a} (mod {m}) does not exist")
+    else:
+        return x % m
+
+def crt(n, m):
+    """ The Chinese Remainder Theorem. """
+    sum_ = 0
+    product = functools.reduce(lambda p, q: p*q, n)
+    for n_i, m_i in zip(n, m):
+        p = product // n_i
+        sum_ += m_i * modinv(p, n_i) * p
+    return sum_ % product
 
 def factor(n):
     """ Compute the prime factors of n. """
