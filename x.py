@@ -3,13 +3,12 @@
 
 from lib import *
 
-problem = aoc.Problem("0000/00: ???")
-problem.preprocessor = ppr.identity
+problem = aoc.Problem("2015/01: ???")
+problem.preprocessor = ppr.lsv
 
 @problem.solver()
 def solve(inp):
     p1, p2 = 0, 0
-
     for v in inp:
         print(v)
 
