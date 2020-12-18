@@ -8,7 +8,18 @@ class Point:
     Represents a single point, in any dimension.
     """
 
-    def __init__(self, coordinates):
+    def __init__(self, *args):
+        # this allows for a more flexible argument format to the constructor, 
+        # parsing both Point(1, 2, 3) and Point((1, 2, 3))
+        coordinates = args[0]
+        if len(args) > 1:
+            coordinates = tuple(args)
+
+        # ...but the implementation above still has an edge-case in the case of
+        # a 1-d Point (just use an int!)
+        if type(coordinates) is int:
+            coordinates = (coordinates,)
+
         self.coordinates = tuple(coordinates)
         self.dimension = len(coordinates)
 
@@ -33,9 +44,9 @@ class Point:
         deltas = itertools.product([-1, 0, 1], repeat=self.dimension)
         for delta in deltas:
             if 0 < sum(abs(axis) for axis in delta) <= distance:
-                yield Point([
+                yield Point(tuple(
                     c1 + c2 for c1, c2 in zip(self.coordinates, delta)
-                ])
+                ))
 
     def __add__(self, addend):
         """ Add two points together (pairing up coordinates by axis) and return
@@ -45,9 +56,9 @@ class Point:
         if (augend.dimension != addend.dimension):
             raise ValueError("points are in different dimensions")
 
-        return Point(
-            [c1 + c2 for c1, c2 in zip(augend.coordinates, addend.coordinates)]
-        )
+        return Point(tuple(
+            c1 + c2 for c1, c2 in zip(augend.coordinates, addend.coordinates)
+        ))
 
     def __eq__(self, comparand):
         """ Compare two points and determine equality. """
