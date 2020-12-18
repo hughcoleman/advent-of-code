@@ -9,7 +9,7 @@ class Point:
     """
 
     def __init__(self, coordinates):
-        self.coordinates = coordinates
+        self.coordinates = tuple(coordinates)
         self.dimension = len(coordinates)
 
     def __str__(self):
