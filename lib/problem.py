@@ -49,6 +49,9 @@ class Problem:
         self.fns = {}
         self.preprocessor = lambda x: x
 
+        # all tests are user-defined
+        self.tests = {}
+
     def solver(self, part="both"):
         """ Decorates a function to mark it as a solving method. Optionally
         specify the part being solved using the `part` keyword argument.
@@ -64,6 +67,9 @@ class Problem:
 
     def solve(self):
         """ Run the solver functions and pretty-print the output. """
+
+        if ("--test" in sys.argv):
+            self.test()
 
         # print a neat little header for the problem
         print(f"--- Day {self.day}: {self.name} ---")
@@ -156,4 +162,56 @@ class Problem:
             else:
                 print(f"Part {part}: {out} (runtime: {delta}{unit})") 
 
+        return
+
+    def test(self):
+
+        # ok function
+        def ok(message):
+            print(f"\u001b[42m o \u001b[0m\u001b[32m {message}\u001b[0m")
+
+        # fail function
+        def fail(message, explanation, evidence):
+            print("")
+            print(f"\u001b[41m ! \u001b[0m\u001b[31m {message}\u001b[0m")
+            print(f"    {explanation}")
+            print("")
+
+            if evidence:
+                evidence = evidence.split(" ")
+                while len(evidence) > 0:
+                    buffer = []
+                    while len(" ".join(evidence)) >= 75:
+                        buffer.insert(0, evidence.pop())
+                    
+                    print("    " + " ".join(evidence))
+                    evidence = buffer
+                
+                print("")
+
+        # run each test, and check if it passes
+        for test, conditions in self.tests.items():
+            if len(conditions) == 2:
+                # ...then the test case applies to both parts
+                part = "both"
+                inp_s, expected = conditions
+            elif len(conditions) == 3:
+                # ...then the test case applies to one part
+                part, inp_s, expected = conditions
+
+            inp = self.preprocessor(inp_s)
+            actual = self.fns[part](inp)
+
+            try:
+                assert (actual == expected)
+                
+                ok(f"test.{test} passed!")
+            except AssertionError:
+                fail(f"test.{test} failed!",
+                     f"Program output does not match expected values.",
+                     f"Given the input \"{repr(inp_s)[1:17].strip()}...\", " +
+                     f"the program should have output \"{repr(expected)}\", " +
+                     f"but instead output \"{repr(actual)}\".")
+
+        print("")
         return
