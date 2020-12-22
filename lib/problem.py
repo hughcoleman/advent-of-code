@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
+import sys
 import os
 import re
 import time
@@ -85,6 +86,7 @@ class Problem:
             
             if dt.timedelta(seconds=0) < delta <= dt.timedelta(seconds=15):
                 print("Less than fifteen seconds remaining, will sleep...")
+                sys.stdout.flush()
                 time.sleep(delta.seconds + 1)
 
             elif delta > dt.timedelta(seconds=0):
@@ -130,12 +132,12 @@ class Problem:
 
         # now, read the input from the local cache
         with open(fp, "r") as fh:
-            inp = fh.read()
-
-        # apply the preprocessor
-        inp = self.preprocessor(inp)
+            inp_s = fh.read()
         
         for part, fn in self.fns.items():
+            # apply the preprocessor
+            inp = self.preprocessor(inp_s)
+
             # run the solver on the input and time the runtime
             start = time.perf_counter()
             out   = fn(inp)
