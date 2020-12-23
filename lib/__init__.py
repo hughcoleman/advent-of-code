@@ -6,4 +6,4 @@ import lib.preprocessing as ppr
 
 # import auxillary libraries
 import lib.ntheory as nt
-from lib.point import Point
+from lib.geometry import Point
