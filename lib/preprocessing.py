@@ -1,20 +1,51 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-identity = lambda s: s
+
+def identity(s):
+    return s
+
 
 # space/comma/line separated values/integers
-ssv =  lambda s: [    v.strip()  for v in s.strip().split(" ")   ]
-ssi =  lambda s: [int(v.strip()) for v in s.strip().split(" ")   ]
-csv =  lambda s: [    v.strip()  for v in s.strip().split(",")   ]
-csi =  lambda s: [int(v.strip()) for v in s.strip().split(",")   ]
-lsv =  lambda s: [    l.strip()  for l in s.strip().split("\n")  ]
-lsi =  lambda s: [int(l.strip()) for l in s.strip().split("\n")  ]
-llsv = lambda s: [    l.strip()  for l in s.strip().split("\n\n")]
+def ssv(s):
+    return [v.strip() for v in s.strip().split(" ")]
+
+
+def ssi(s):
+    return [int(v.strip()) for v in s.strip().split(" ")]
+
+
+def csv(s):
+    return [v.strip() for v in s.strip().split(",")]
+
+
+def csi(s):
+    return [int(v.strip()) for v in s.strip().split(",")]
+
+
+def lsv(s):
+    return [l.strip() for l in s.strip().split("\n")]
+
+
+def lsi(s):
+    return [int(l.strip()) for l in s.strip().split("\n")]
+
+
+def llsv(s):
+    return [l.strip() for l in s.strip().split("\n\n")]
+
 
 # grids
-grid = lambda s: [list(l) for l in s.strip().split("\n")]
+
+
+def grid(s):
+    return [list(l) for l in s.strip().split("\n")]
+
 
 # characters/digit strings
-characters = lambda s: [    c  for c in list(s.strip())]
-digits     = lambda s: [int(d) for d in list(s.strip())] 
+def characters(s):
+    return [c for c in list(s.strip())]
+
+
+def digits(s):
+    return [int(d) for d in list(s.strip())]

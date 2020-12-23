@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-
 import urllib.request
+
 
 def fetch(*args, **kwargs):
     # make the request

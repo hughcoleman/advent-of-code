@@ -140,7 +140,7 @@ cython_debug/
 # Advent of Code
 
 # ignore input/output files
-input 
+input
 input.txt
 *.in
 *.out
