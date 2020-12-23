@@ -1,0 +1,31 @@
+# visit https://pre-commit.com for more information
+repos:
+-   repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v3.2.0
+    hooks:
+    -   id: check-ast
+    -   id: check-docstring-first
+    -   id: check-json
+    -   id: check-yaml
+    -   id: end-of-file-fixer
+    -   id: fix-encoding-pragma
+    -   id: requirements-txt-fixer
+    -   id: trailing-whitespace
+-   repo: https://github.com/psf/black
+    rev: stable
+    hooks:
+    -   id: black
+        args: [
+                "--line-length=79",
+                "--target-version=py38"
+        ]
+-   repo: https://gitlab.com/pycqa/flake8
+    rev: 3.7.9
+    hooks:
+    -   id: flake8
+        args: [
+                "--ignore=E203,E266,E501,W503,F403,F401",
+                "--max-line-length=79",
+                "--max-complexity=18",
+                "--select=B,C,E,F,W,T4,B9"
+        ]
