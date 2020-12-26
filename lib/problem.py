@@ -1,13 +1,11 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-import datetime as dt
-import os
-import pathlib
-import re
-import sys
-import time
 
-from .net import fetch
+import sys
+import re
+import time
+import pathlib
+import fileinput
 
 
 class Problem:
@@ -73,9 +71,6 @@ class Problem:
     def solve(self):
         """ Run the solver functions and pretty-print the output. """
 
-        if "--test" in sys.argv:
-            self.test()
-
         # print a neat little header for the problem
         print(f"--- Day {self.day}: {self.name} ---")
 
@@ -85,73 +80,38 @@ class Problem:
             + f"{str(self.day).zfill(2)}/input"
         ).expanduser()
 
-        # if the input isn't cached, download from the adventofcode.com server
-        # and cache
-        if not fp.exists():
-            print(
-                "No cached input; downloading from "
-                + "\u001b[4madventofcode.com\u001b[0m..."
-            )
+        # if the input isn't cached, or an overwrite is forced, check stdin and
+        # argv for the input data
+        if not fp.exists() or ("--overwrite" in sys.argv):
+            if "--overwrite" in sys.argv:
+                # because fileinput will try to read from a file called
+                # "--overwrite" otherwise
+                sys.argv.remove("--overwrite")
+                print("[!] Overwriting input file using stdin...")
+            else:
+                print("[!] Writing to input file from stdin...")
 
-            # first check the current time to ensure that it is past midnight
-            # est before fetching problem input from server
-            est = dt.timezone(dt.timedelta(hours=-5))
-            delta = dt.datetime(
-                self.year, 12, self.day, tzinfo=est
-            ) - dt.datetime.now(tz=est)
+            # fileinput automatically checks sys.stdin as well as argv[1:]
+            with fileinput.input() as fh:
+                inp_s = ""
+                for ln in fh:
+                    inp_s = inp_s + ln
 
-            if dt.timedelta(seconds=0) < delta <= dt.timedelta(seconds=15):
-                print("Less than fifteen seconds remaining, will sleep...")
-                sys.stdout.flush()
-                time.sleep(delta.seconds + 1)
-
-            elif delta > dt.timedelta(seconds=0):
-                # determine time remaining until unlock and display a formatted
-                # countdown timer
-                d = delta.days
-                h = (delta.seconds // 3600) % 24
-                m = (delta.seconds // 60) % 60
-                s = (delta.seconds) % 60
-
-                countdown = (
-                    (f"{str(d).zfill(2)}d" if d > 0 else "")
-                    + (f"{str(h).zfill(2)}h" if h > 0 else "")
-                    + (f"{str(m).zfill(2)}m" if m > 0 else "")
-                    + (f"{str(s).zfill(2)}s")
-                )
-
-                print("Problem hasn't unlocked;", countdown, "remaining.")
-                return
-
-            # read the session token from environment variable, or, if not set,
-            # from a secret file
-            token = os.environ.get("AOC_TOKEN", None)
-            if not token:
-                with open(os.path.expanduser("~/.aoc/token"), "r") as fh:
-                    token = fh.read()
-
-            token = token.strip()
-
-            # fetch input from the server
-            response = fetch(
-                "https://adventofcode.com/{}/day/{}/input".format(
-                    self.year, self.day
-                ),
-                headers={
-                    "Cookie": f"session={token};",
-                    "User-Agent": "python",
-                },
-            )
+            # easy sanity checking
+            print(repr(inp_s)[:32] + "..." + repr(inp_s)[-32:])
 
             # write the input data to the local cache
             fp.parent.mkdir(parents=True, exist_ok=True)
-            with open(fp, "wb") as fh:
-                fh.write(response)
+            with open(fp, "w") as fh:
+                fh.write(inp_s)
+        else:
+            print("Reading input from local cache...")
 
-        # now, read the input from the local cache
-        with open(fp, "r") as fh:
-            inp_s = fh.read()
+            # now, read the input from the local cache
+            with open(fp, "r") as fh:
+                inp_s = fh.read()
 
+        # run each solver in the self.fns field.
         for part, fn in self.fns.items():
             # apply the preprocessor
             inp = self.preprocessor(inp_s)
