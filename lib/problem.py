@@ -25,16 +25,16 @@ class Problem:
             Problem(year=2015, day=1, name="Not Quite Lisp")
         """
 
-        if (
-            match := re.fullmatch(  # noqa: E231
-                re.compile(
-                    r"(?P<year>[0-9]{4})\/"
-                    + r"(?P<day>0?[1-9]|1[0-9]|2[0-5])\: "
-                    + r"(?P<name>.+)"
-                ),
-                "".join(args),
-            )
-        ) :
+        match = re.fullmatch(  # noqa: E231
+            re.compile(
+                r"(?P<year>[0-9]{4})\/"
+                + r"(?P<day>0?[1-9]|1[0-9]|2[0-5])\: "
+                + r"(?P<name>.+)"
+            ),
+            "".join(args),
+        )
+
+        if (match):
             self.year = int(match.group("year"))
             self.day = int(match.group("day"))
             self.name = str(match.group("name"))
@@ -44,7 +44,7 @@ class Problem:
             self.name = str(kwargs.get("name", "???"))
         else:
             raise ValueError(
-                "could not parse arguments to Problem " + "constructor."
+                "could not parse arguments to Problem constructor."
             )
 
         # the solver functions, and the input preprocessor, are stored as class
@@ -72,24 +72,24 @@ class Problem:
         """ Run the solver functions and pretty-print the output. """
 
         # print a neat little header for the problem
-        print(f"--- Day {self.day}: {self.name} ---")
+        print("--- Day {}: {} ---".format(self.day, self.name))
 
         # setup the path to the local cache
         fp = pathlib.Path(
-            f"~/.cache/adventofcode.com/{str(self.year)}/"
-            + f"{str(self.day).zfill(2)}/input"
+            "~/.cache/adventofcode.com/{}/".format(self.year)
+            + "{}/input".format(str(self.day).zfill(2))
         ).expanduser()
 
         # if the input isn't cached, or an overwrite is forced, check stdin and
         # argv for the input data
         if not fp.exists() or ("--overwrite" in sys.argv):
             if "--overwrite" in sys.argv:
-                # because fileinput will try to read from a file called
-                # "--overwrite" otherwise
                 sys.argv.remove("--overwrite")
-                print("[!] Overwriting input file using stdin...")
+                # ...because fileinput will try to read from a file called
+                # "--overwrite" otherwise
+                print("[!] overwriting input file using stdin...")
             else:
-                print("[!] Writing to input file from stdin...")
+                print("[!] writing to input file from stdin...")
 
             # fileinput automatically checks sys.stdin as well as argv[1:]
             with fileinput.input() as fh:
@@ -102,13 +102,13 @@ class Problem:
 
             # write the input data to the local cache
             fp.parent.mkdir(parents=True, exist_ok=True)
-            with open(fp, "w") as fh:
+            with open(str(fp), "w") as fh:
                 fh.write(inp_s)
         else:
-            print("Reading input from local cache...")
+            print("reading input from local cache...\n")
 
             # now, read the input from the local cache
-            with open(fp, "r") as fh:
+            with open(str(fp), "r") as fh:
                 inp_s = fh.read()
 
         # run each solver in the self.fns field.
@@ -129,9 +129,13 @@ class Problem:
 
             # print answers
             if (part in ["both"]) and (type(out) is tuple) and (len(out) >= 2):
-                print(f"Part 1: {out[0]}")
-                print(f"Part 2: {out[1]} (total runtime: {delta}{unit})")
+                print("Part 1: {}".format(out[0]))
+                print("Part 2: {} (total runtime: {}{})".format(
+                    out[1], delta, unit
+                ))
             else:
-                print(f"Part {part}: {out} (runtime: {delta}{unit})")
+                print("Part {}: {} (runtime: {}{})".format(
+                    part, out, delta, unit    
+                ))
 
         return

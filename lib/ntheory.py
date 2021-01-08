@@ -44,7 +44,9 @@ def modinv(a, m):
     """ Compute the modular multiplicative inverse of a mod m. """
     g, x, y = egcd(a, m)
     if g != 1:
-        raise Exception(f"modular inverse of {a} (mod {m}) does not exist")
+        raise Exception("modinv of {} (mod {}) does not exist".format(
+            a, m    
+        ))
     else:
         return x % m
 
