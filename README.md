@@ -1,7 +1,8 @@
-<h3 align="center">adventofcode</h3>
+<h3 align="center">advent-of-code</h3>
 
 <p align="center">
-  <b>My solutions to the <a href="https://adventofcode.com/">Advent of Code :christmas_tree:</a> problems.</b>
+  <b>:christmas_tree:</b>
 </p>
 
-I'm *somewhat* competitive; placed 282<sup>nd</sup> (overall) in 2019 and 61<sup>st</sup> (overall) in 2020.
+I'm somewhat competitive; I placed 282<sup>nd</sup> overall in 2019 and
+61<sup>st</sup> overall in 2020.
