@@ -1,12 +1,7 @@
-#!/usr/bin/env python
-# -*- coding: utf-8 -*-
 import itertools
 
-
 class Point:
-    """class Point
-    Represents a single point, in any dimension.
-    """
+    """ Represents a single point, in any dimension. """
 
     def __init__(self, *args):
         # this allows for a more flexible argument format to the constructor,
@@ -98,7 +93,6 @@ class Point:
         return sum(
             abs(c1 - c2) for c1, c2 in zip(p1.coordinates, p2.coordinates)
         )
-
 
 Point.NORTH = Point((1, 0))
 Point.SOUTH = Point((-1, 0))
