@@ -1,6 +1,3 @@
-#!/usr/bin/env python
-# -*- coding: utf-8 -*-
-
 from lib import *
 problem = aoc.Problem("2015/09: All in a Single Night")
 problem.preprocessor = ppr.lsv
@@ -8,7 +5,6 @@ problem.preprocessor = ppr.lsv
 import collections as cl
 import itertools as it
 import math
-
 
 @problem.solver()
 def tsp(inp):
@@ -19,7 +15,7 @@ def tsp(inp):
         distances[origin][destination] = int(distance)
         distances[destination][origin] = int(distance)
 
-    # only seven places to visit; a brute-force is probably fast enough
+    # Only seven places to visit; a brute-force is probably fast enough.
     shortest, longest = math.inf, -math.inf
     for sequence in it.permutations(distances.keys()):
         distance = 0

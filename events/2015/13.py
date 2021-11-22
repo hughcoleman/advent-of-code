@@ -1,6 +1,3 @@
-#!/usr/bin/env python
-# -*- coding: utf-8 -*-
-
 from lib import *
 problem = aoc.Problem("2015/13: Knights of the Dinner Table")
 problem.preprocessor = ppr.lsv
@@ -8,15 +5,11 @@ problem.preprocessor = ppr.lsv
 import collections as cl
 import itertools as it
 import re
-import math
-
 
 parser = re.compile(r"(\w+?) .*? (gain|lose) (\d+) .*? (\w+?)\.")
 
-
 @problem.solver()
 def solve(relations):
-
     rules = cl.defaultdict(dict)
     for relation in relations:
         person, direction, score, neighbour = re.match(
@@ -35,7 +28,7 @@ def solve(relations):
 
     p1 = max(happiness(ordering) for ordering in it.permutations(rules.keys()))
 
-    # add self
+    # Add self!
     for person in list(rules.keys()):
         rules["self"][person] = 0
         rules[person]["self"] = 0

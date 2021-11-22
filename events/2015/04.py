@@ -1,15 +1,11 @@
-#!/usr/bin/env python
-# -*- coding: utf-8 -*-
-
 from lib import *
 problem = aoc.Problem("2015/04: The Ideal Stocking Stuffer")
-problem.preprocessor = ppr.identity
+problem.preprocessor = ppr.I
 
 import hashlib
 
-
 def ac_miner(key):
-    # initial number of leading zeroes required is five.
+    # The initial number of leading zeroes required is 5.
     lead = 5
 
     i = 0
@@ -20,11 +16,9 @@ def ac_miner(key):
             lead = lead + 1
         i = i + 1
 
-
 @problem.solver()
 def solve(key):
     miner = ac_miner(key.strip())
-
     return (next(miner), next(miner))
 
 

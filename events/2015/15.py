@@ -1,22 +1,15 @@
-#!/usr/bin/env python
-# -*- coding: utf-8 -*-
-
 from lib import *
 problem = aoc.Problem("2015/15: Science for Hungry People")
 problem.preprocessor = ppr.lsv
 
-
 import collections as cl
 import re
-import itertools
 
 Ingredient = cl.namedtuple(
     "Ingredient", ["capacity", "durability", "flavor", "texture", "calories"]
 )
 
-
 parser = re.compile(r"(.*):.*?(-?\d+).*?(-?\d+).*?(-?\d+).*?(-?\d+).*?(-?\d+)")
-
 
 def partition(n, k):
     if k <= 1:
@@ -25,7 +18,6 @@ def partition(n, k):
         for head in range(0, n + 1):
             for tail in partition(n - head, k - 1):
                 yield [head] + tail
-
 
 @problem.solver()
 def solve(ingredients):

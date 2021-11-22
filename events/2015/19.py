@@ -1,18 +1,14 @@
-#!/usr/bin/env python
-# -*- coding: utf-8 -*-
-
 from lib import *
 problem = aoc.Problem("2015/19: Medicine for Rudolph")
 problem.preprocessor = lambda inp: (
-    # extract all possible reactions
+    # Extract all possible reactions...
     [
         (reaction.split(" => ")[0], split(reaction.split(" => ")[1]))
-        for reaction in inp.strip().split("\n\n")[0].split("\n")
+            for reaction in inp.strip().split("\n\n")[0].split("\n")
     ],
-    # medicine formula
+    # ...and the formula.
     split(inp.strip().split("\n\n")[1]),
 )
-
 
 def split(compound):
     terms = []
@@ -26,7 +22,6 @@ def split(compound):
 
     terms.append(term)
     return terms
-
 
 @problem.solver(part=1)
 def p1(inp):
@@ -42,19 +37,18 @@ def p1(inp):
 
     return len(compounds)
 
-
 @problem.solver(part=2)
 def p2(inp):
     reactions, medicine = inp
 
     medicine = "".join(medicine)
 
-    # because of the way that the input is crafted, we can greedily just
+    # Because of the way that the input is crafted, we can greedily just
     # reverse any reaction we see until we are left with one election.
     #
-    # personally, I'm not a fan of this solution; I'd much rather have written
+    # Personally, I'm not a fan of this solution; I'd much rather have written
     # a clever algorithm that carefully considered which reactions to do... but
-    # I'll live with this shame.
+    # I'll live with this.
     n = 0
     while medicine != "e":
         for reactant, products in reactions:

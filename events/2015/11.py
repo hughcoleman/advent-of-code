@@ -1,31 +1,26 @@
-#!/usr/bin/env python
-# -*- coding: utf-8 -*-
-
 from lib import *
 problem = aoc.Problem("2015/11: Corporate Policy")
-problem.preprocessor = ppr.identity
+problem.preprocessor = lambda password: passgen(
+    sum(
+        "abcdefghijklmnopqrstuvwxyz".index(c) * 26**i
+            for i, c in enumerate(reversed(password.strip()))
+    )
+)
 
+import itertools as it
 import re
 from string import ascii_lowercase
 
+def passgen(password):
+    for i in it.count():
+        n = password + i
 
-def increment(password):
-    # find base-10 representation of base-26 password
-    n = 0
-    for i, character in enumerate(password[::-1]):
-        n = n + ascii_lowercase.index(character) * pow(26, i)
+        s = ""
+        while n > 0:
+            s = ascii_lowercase[n % 26] + s
+            n = n // 26
 
-    # increment one character
-    n = n + 1
-
-    # reconstruct
-    s = ""
-    while n > 0:
-        s = ascii_lowercase[n % 26] + s
-        n = n // 26
-
-    return s
-
+        yield s
 
 def valid(password):
     return (
@@ -37,21 +32,19 @@ def valid(password):
         and bool(re.search(r"(.)\1.*(.)\2", password))
     )
 
-
 @problem.solver()
-def solve(password):
+def solve(G):
+    password = next(G)
     while not valid(password):
-        password = increment(password)
+        password = next(G)
 
     p1 = password
 
-    password = increment(password)
+    password = next(G)
     while not valid(password):
-        password = increment(password)
+        password = next(G)
 
-    p2 = password
-
-    return (p1, p2)
+    return (p1, password)
 
 
 if __name__ == "__main__":

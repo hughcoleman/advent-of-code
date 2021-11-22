@@ -1,25 +1,17 @@
-#!/usr/bin/env python
-# -*- coding: utf-8 -*-
-
 from lib import *
 problem = aoc.Problem("2015/21: RPG Simulator 20XX")
 problem.preprocessor = ppr.lsv
 
 import math
-
-"""
-
-The number of hits that it will take a given entity to perish is.
-
-    math.ceil(PLAYER_HEALTH / max(BOSS_ATTACK - PLAYER_DEFENCE, 1))
-    math.ceil(BOSS_HEALTH / max(PLAYER_ATTACK - BOSS_DEFENCE, 1))
-
-Because the player always goes first, as long as
-PLAYER_RESILIENCE >= BOSS_RESILIENCE, then we can guarantee victory.
-
-"""
-
 import itertools
+
+# The number of hits that it will take a given entity to perish is.
+#
+#     math.ceil(PLAYER_HEALTH / max(BOSS_ATTACK - PLAYER_DEFENCE, 1))
+#     math.ceil(BOSS_HEALTH / max(PLAYER_ATTACK - BOSS_DEFENCE, 1))
+#
+# Because the player always goes first, as long as
+# PLAYER_RESILIENCE >= BOSS_RESILIENCE, then we can guarantee victory.
 
 WEAPONS = [
     (8, 4, 0),   # Dagger
@@ -46,14 +38,13 @@ RINGS = [
     (80, 0, 3),   # Defense III
 ]
 
-# add no-armor options
+# Add no-armor options.
 ARMOR.append((0, 0, 0))
 
-# compute ring pairings
+# Compute ring pairings.
 for pairing in itertools.combinations(RINGS, 2):
     RINGS.append(tuple(sum(i) for i in zip(*pairing)))
 RINGS.append((0, 0, 0))
-
 
 @problem.solver()
 def solve(inp):

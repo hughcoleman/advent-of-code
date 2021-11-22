@@ -1,6 +1,3 @@
-#!/usr/bin/env python
-# -*- coding: utf-8 -*-
-
 from lib import *
 problem = aoc.Problem("2015/25: Let It Snow")
 problem.preprocessor = lambda message: tuple(
@@ -8,7 +5,6 @@ problem.preprocessor = lambda message: tuple(
 )
 
 import re
-
 
 @problem.solver()
 def solve(inp):
@@ -18,7 +14,7 @@ def solve(inp):
 
     return (
         (20151125 * pow(252533, N - 1, 33554393)) % 33554393,
-        "Merry Christmas!",
+        "Merry Christmas!"
     )
 
 

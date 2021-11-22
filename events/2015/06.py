@@ -1,13 +1,9 @@
-#!/usr/bin/env python
-# -*- coding: utf-8 -*-
-
 from lib import *
 problem = aoc.Problem("2015/06: Probably a Fire Hazard")
 problem.preprocessor = ppr.lsv
 
 import re
 import collections as cl
-
 
 @problem.solver(part=1)
 def p1(instructions):
@@ -27,7 +23,6 @@ def p1(instructions):
 
     return list(lights.values()).count(True)
 
-
 @problem.solver(part=2)
 def p2(instructions):
     lights = cl.defaultdict(int)
@@ -38,9 +33,11 @@ def p2(instructions):
 
         for x in range(int(sx), int(ex) + 1):
             for y in range(int(sy), int(ey) + 1):
-                lights[x, y] += {"turn on": 1, "turn off": -1, "toggle": 2}[
-                    action
-                ]
+                lights[x, y] += {
+                    "turn on": 1,
+                    "turn off": -1,
+                    "toggle": 2
+                }[action]
 
                 if lights[x, y] < 0:
                     lights[x, y] = 0

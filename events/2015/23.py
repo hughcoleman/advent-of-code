@@ -1,20 +1,16 @@
-#!/usr/bin/env python
-# -*- coding: utf-8 -*-
-
 from lib import *
 problem = aoc.Problem("2015/23: Opening the Turing Lock")
 problem.preprocessor = lambda instructions: [
     (instruction.split(" ")[0], instruction.split(" ", 1)[1].split(", "))
-    for instruction in instructions.strip().split("\n")
+        for instruction in instructions.strip().split("\n")
 ]
-
 
 def run(instructions, a=0, b=0):
     ip = 0
     registers = {"a": a, "b": b}
 
     while True:
-        # machine halts if instruction pointer leaves the addressable space
+        # Machine halts if instruction pointer leaves the addressable space.
         if ip < 0 or ip >= len(instructions):
             break
 
@@ -36,12 +32,11 @@ def run(instructions, a=0, b=0):
             if registers[arguments[0]] == 1:
                 offset = int(arguments[1])
         else:
-            raise RuntimeError(f"unparseable instruction {instruction}")
+            raise RuntimeError(f"Couldn't parse instruction '{instruction}'.")
 
         ip = ip + offset
 
     return registers["b"]
-
 
 @problem.solver()
 def solve(instructions):

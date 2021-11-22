@@ -1,34 +1,32 @@
-#!/usr/bin/env python
-# -*- coding: utf-8 -*-
-
 from lib import *
 problem = aoc.Problem("2015/22: Wizard Simulator 20XX")
 problem.preprocessor = ppr.lsv
 
-
+import heapq as hq
 import math
-
 
 def simulate(B_HEALTH, B_ATTACK, P_HEALTH, P_MANA, hard=False):
     cheapest = math.inf
 
-    horizon = [(B_HEALTH, P_HEALTH, P_MANA, 0x000, 0, 0, hard)]
-    while len(horizon) > 0:
-        boss, player, mana, effects, turn, expended, hard = horizon.pop(0)
+    Q = [(B_HEALTH, P_HEALTH, P_MANA, 0x000, 0, 0, hard)]
+    hq.heapify(Q)
 
-        # if we've expended more mana than the known minimum, skip
+    while len(Q) > 0:
+        boss, player, mana, effects, turn, expended, hard = hq.heappop(Q)
+
+        # If we've expended more mana than the known minimum, skip.
         if expended > cheapest:
             continue
 
-        # handle hard mode
+        # Handle hard mode.
         if hard and turn % 2 == 0:
             player = player - 1
 
             if player <= 0:
                 continue
 
-        # apply the consequences of any effects that are currently active, and
-        # cooldown
+        # Apply the consequences of any effects that are currently active, and
+        # cooldown.
         armor = 0
         if effects & 0xF00 > 0:  # SHIELD
             armor = 7
@@ -40,16 +38,16 @@ def simulate(B_HEALTH, B_ATTACK, P_HEALTH, P_MANA, hard=False):
             mana = mana + 101
             effects = effects - 0x001
 
-        # check boss health (died from POISON?)
+        # Check boss health (died from POISON?)
         if boss <= 0:
             cheapest = min(cheapest, expended)
 
-        # even-numbered turns are the player's turns
+        # Even-numbered turns are the player's turns.
         if turn % 2 <= 0:
-            # cast all castable spells, and simulate out those cases until
-            # failiure
+            # Cast all castable spells, and simulate out those cases until
+            # failiure.
             if mana >= 53:  # MAGIC_MISSILE
-                horizon.append(
+                hq.heappush(Q,
                     (
                         boss - 4,
                         player,
@@ -62,7 +60,7 @@ def simulate(B_HEALTH, B_ATTACK, P_HEALTH, P_MANA, hard=False):
                 )
 
             if mana >= 73:  # DRAIN
-                horizon.append(
+                hq.heappush(Q,
                     (
                         boss - 2,
                         player + 2,
@@ -75,7 +73,7 @@ def simulate(B_HEALTH, B_ATTACK, P_HEALTH, P_MANA, hard=False):
                 )
 
             if mana >= 113 and effects & 0xF00 <= 0:  # SHIELD
-                horizon.append(
+                hq.heappush(Q,
                     (
                         boss,
                         player,
@@ -88,7 +86,7 @@ def simulate(B_HEALTH, B_ATTACK, P_HEALTH, P_MANA, hard=False):
                 )
 
             if mana >= 173 and effects & 0x0F0 <= 0:  # POISON
-                horizon.append(
+                hq.heappush(Q,
                     (
                         boss,
                         player,
@@ -101,7 +99,7 @@ def simulate(B_HEALTH, B_ATTACK, P_HEALTH, P_MANA, hard=False):
                 )
 
             if mana >= 229 and effects & 0x00F <= 0:  # RECHARGE
-                horizon.append(
+                hq.heappush(Q,
                     (
                         boss,
                         player,
@@ -113,16 +111,15 @@ def simulate(B_HEALTH, B_ATTACK, P_HEALTH, P_MANA, hard=False):
                     )
                 )
 
-        # odd-numbered turns are the boss' turns
+        # Odd-numbered turns are the boss' turns.
         else:
             player = player - max(1, B_ATTACK - armor)
             if player > 0:
-                horizon.append(
+                hq.heappush(Q,
                     (boss, player, mana, effects, turn + 1, expended, hard)
                 )
 
     return cheapest
-
 
 @problem.solver()
 def solve(inp):

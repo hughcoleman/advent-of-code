@@ -1,14 +1,9 @@
-#!/usr/bin/env python
-# -*- coding: utf-8 -*-
-
 from lib import *
 problem = aoc.Problem("2015/24: It Hangs in the Balance")
 problem.preprocessor = ppr.lsi
 
-
 import math
 import itertools
-
 
 def qe(weights):
     p = 1
@@ -16,11 +11,10 @@ def qe(weights):
         p *= weight
     return p
 
-
 def pack(packages, compartements):
     weight = sum(packages) / compartements
 
-    # determine number of packages to pack in the front compartement
+    # Determine number of packages to pack in the front compartement.
     for size in range(1, len(packages)):
         for packing in itertools.combinations(packages, size):
             if sum(packing) != weight:
@@ -30,7 +24,7 @@ def pack(packages, compartements):
             continue
         break
 
-    # find optimal quantum entaglement score
+    # Find optimal quantum entaglement score.
     optimal = math.inf
     for packing in itertools.combinations(packages, size):
         if sum(packing) != weight:
@@ -38,7 +32,6 @@ def pack(packages, compartements):
         optimal = min(optimal, qe(packing))
 
     return optimal
-
 
 @problem.solver()
 def solve(packages):

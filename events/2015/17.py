@@ -1,12 +1,8 @@
-#!/usr/bin/env python
-# -*- coding: utf-8 -*-
-
 from lib import *
 problem = aoc.Problem("2015/17: No Such Thing as Too Much")
 problem.preprocessor = ppr.lsi
 
 import itertools
-
 
 @problem.solver()
 def solve(cups):

@@ -1,12 +1,8 @@
-#!/usr/bin/env python
-# -*- coding: utf-8 -*-
-
 from lib import *
 problem = aoc.Problem("2015/05: Doesn't He Have Intern-Elves For This?")
 problem.preprocessor = ppr.lsv
 
 import re
-
 
 @problem.solver(part=1)
 def p1(strings):
@@ -21,12 +17,11 @@ def p1(strings):
 
     return valid
 
-
 @problem.solver(part=2)
 def p2(strings):
     valid = 0
     for string in strings:
-        # I tried to maintain a Pythonic solution, but caved for Part 2. Regex!
+        # I tried to write a Python-ic solution, but gave up. Regex!
         if re.search(r"(..).*\1", string) and re.search(r"(.).\1", string):
             valid = valid + 1
 

@@ -1,10 +1,6 @@
-#!/usr/bin/env python
-# -*- coding: utf-8 -*-
-
 from lib import *
 problem = aoc.Problem("2015/07: Some Assembly Required")
 problem.preprocessor = ppr.lsv
-
 
 OPERATIONS = {
     "AND": lambda o1, o2: o1 & o2,
@@ -13,7 +9,6 @@ OPERATIONS = {
     "LSHIFT": lambda o, shift: o << shift,
     "RSHIFT": lambda o, shift: o >> shift,
 }
-
 
 def simulate(wires, override={}):
     # Given the wirings in the circuit, and overrides on the wires, compute the
@@ -29,19 +24,19 @@ def simulate(wires, override={}):
                 continue
 
             terms = inputs.split(" ")
-            if len(terms) == 1:  # ...then this is a "set"
+            if len(terms) == 1:  # ...then this is a "set."
                 if terms[0].isdigit():
                     signals[output] = int(terms[0])
                 elif terms[0] in signals.keys():
                     signals[output] = signals[terms[0]]
 
-            elif len(terms) == 2:  # ...then this is a bitwise "NOT"
+            elif len(terms) == 2:  # ...then this is a bitwise "NOT."
                 assert terms[0] == "NOT"
 
                 if terms[1] in signals.keys():
                     signals[output] = OPERATIONS["NOT"](signals[terms[1]])
 
-            elif len(terms) == 3:  # ...then this is a bitwise operation
+            elif len(terms) == 3:  # ...then this is a bitwise operation.
                 assert terms[1] in OPERATIONS.keys()
 
                 o1, operation, o2 = terms
@@ -51,7 +46,7 @@ def simulate(wires, override={}):
                 elif o1 in signals.keys():
                     o1 = signals[o1]
                 else:
-                    # all terms in rule not fully resolved
+                    # All terms in rule not fully resolved.
                     continue
 
                 if o2.isdigit():
@@ -59,16 +54,15 @@ def simulate(wires, override={}):
                 elif o2 in signals.keys():
                     o2 = signals[o2]
                 else:
-                    # all terms in rule not fully resolved
+                    # All terms in rule not fully resolved.
                     continue
 
                 signals[output] = OPERATIONS[operation](o1, o2)
 
             else:
-                raise RuntimeError("unreachable state?")
+                raise ValueError("Unexpected number of arguments.")
 
     return signals["a"]
-
 
 @problem.solver()
 def solve(wires):
