@@ -1,2 +1,3 @@
 networkx
+requests
 z3-solver
