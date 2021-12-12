@@ -1,0 +1,2 @@
+networkx==2.6.3
+z3-solver==4.8.13.0
