@@ -1,0 +1,11 @@
+/**/__pycache__/
+/**/.venv/
+/**/venv/
+
+.TOKEN
+.AOC_TOKEN
+/**/.cache/
+/**/in
+/**/input
+/**/*.in
+/**/input.*
