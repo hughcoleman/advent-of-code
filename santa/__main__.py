@@ -161,13 +161,21 @@ def run(fp, invalidate_cached_input=False, timeout=10):
     )
 
     # Run the script.
+    if sys.stdin.isatty():
+        inp_s = get_input(year, day, invalidate_cached_input)
+    else:
+        print(PREFIX_WARN,
+            "Standard input isn't interactive; assuming input data is piped."
+        )
+        inp_s = sys.stdin.read().encode()
+
     try:
         process = subprocess.run(
             # TODO: Properly "activate" the virtualenv.
             [
                 "./.venv/bin/python3", str(fp)
             ],
-            input=get_input(year, day, invalidate_cached_input),
+            input=inp_s,
             stdout=sys.stdout, # we need to see the output!
             timeout=timeout
         )
