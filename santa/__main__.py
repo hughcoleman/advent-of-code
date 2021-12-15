@@ -90,8 +90,25 @@ def get_input(year, day, invalidate_cached_input=False):
         # a secret file.
         _token = os.environ.get("AOC_TOKEN")
         if not _token:
-            with pathlib.Path(".AOC_TOKEN").open(mode="r") as fh:
-                _token = fh.read()
+            token_fps = [
+                pathlib.Path(".AOC_TOKEN"),
+                pathlib.Path(".TOKEN"),
+                pathlib.Path("~/.AOC_TOKEN").expanduser(),
+                pathlib.Path("~/.TOKEN").expanduser()
+            ]
+            for token_fp in token_fps:
+                if not token_fp.is_file():
+                    continue
+
+                print(PREFIX_INFO, f"Reading token from '{token_fp}'.")
+
+                with token_fp.open(mode="r") as fh:
+                    _token = fh.read()
+
+                break
+            else:
+                print(PREFIX_ERR, "Couldn't locate token.")
+                sys.exit(1)
 
         _token = _token.strip()
 
