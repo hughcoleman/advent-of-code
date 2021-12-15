@@ -48,23 +48,18 @@ def get_input(year, day, invalidate_cached_input=False):
     ).resolve()
 
     if not fp.is_file() or invalidate_cached_input:
-        print(PREFIX_INFO, "Downloading input from adventofcode.com...")
+        # Wait until after midnight, eastern. We don't want to spam the
+        # servers before the puzzle unlocks!
+        waiting = 0
+        while True:
+            est = datetime.timezone(datetime.timedelta(hours=-5))
+            delta = (
+                datetime.datetime(year, 12, day, tzinfo=est) - datetime.datetime.now(tz=est)
+            )
 
-        # First, check the current time to ensure that the puzzle has unlocked.
-        # We don't want to spam the servers!
-        est = datetime.timezone(datetime.timedelta(hours=-5))
-        delta = (
-            datetime.datetime(year, 12, day, tzinfo=est) - datetime.datetime.now(tz=est)
-        )
+            if delta < datetime.timedelta(seconds=0):
+                break
 
-        if datetime.timedelta(seconds=0) < delta <= datetime.timedelta(seconds=15):
-            print(PREFIX_INFO, "Less than 15s remaining, will sleep...")
-            sys.stdout.flush()
-
-            # Wait until the puzzle unlocks, and a bit more.
-            time.sleep(delta.seconds + 1)
-
-        elif delta > datetime.timedelta(seconds=0):
             # Determine the time remaining until unlock, and display a
             # formatted countdown timer.
 
@@ -80,8 +75,16 @@ def get_input(year, day, invalidate_cached_input=False):
               + (f"{s:02}s")
             )
 
-            print(PREFIX_ERR, f"Puzzle hasn't unlocked; {countdown} remaining.")
-            sys.exit(1)
+            if waiting > 0:
+                print("\x1b[A", end="")
+            print(PREFIX_WARN,
+                f"Puzzle hasn't unlocked; {countdown} remaining."
+            )
+
+            waiting = waiting + 1
+            time.sleep(1)
+
+        print(PREFIX_INFO, "Downloading input from adventofcode.com...")
 
         # Read the session token from an environment variable, or, from
         # a secret file.
