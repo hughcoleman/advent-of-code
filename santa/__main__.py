@@ -35,6 +35,8 @@ subparser_run.add_argument("script", nargs="?", default=None)
 subparser_run.add_argument("--invalidate-cached-input", default=False,
     action="store_true",
     help="invalidate the cached input; fetch again from server.")
+subparser_run.add_argument("--test", default=False, action="store_true",
+    help="pass '--test' to the script.")
 subparser_run.add_argument("--timeout", type=int, default=10,
     help="kill script after (default: 10) seconds.")
 
@@ -134,7 +136,7 @@ def get_input(year, day, invalidate_cached_input=False):
 
     return inp_s
 
-def run(fp, invalidate_cached_input=False, timeout=10):
+def run(fp, invalidate_cached_input=False, test=False, timeout=10):
     """ Run script `fp`. """
 
     # Determine the year and day associated with this script. This information
@@ -193,7 +195,7 @@ def run(fp, invalidate_cached_input=False, timeout=10):
         process = subprocess.run(
             # TODO: Properly "activate" the virtualenv.
             [
-                "./.venv/bin/python3", str(fp)
+                "./.venv/bin/python3", str(fp), "--test" if test else ""
             ],
             input=inp_s,
             stdout=sys.stdout, # we need to see the output!
@@ -212,6 +214,7 @@ if __name__ == "__main__":
         run(
             pathlib.Path.cwd() / "main.py",
             invalidate_cached_input=args.invalidate_cached_input,
+            test=args.test,
             timeout=args.timeout
         )
 
@@ -223,6 +226,7 @@ if __name__ == "__main__":
                     run(
                         fp,
                         invalidate_cached_input=args.invalidate_cached_input,
+                        test=args.test,
                         timeout=args.timeout
                     )
             elif p.is_file():
@@ -230,5 +234,6 @@ if __name__ == "__main__":
                 run(
                     p,
                     invalidate_cached_input=args.invalidate_cached_input,
+                    test=args.test,
                     timeout=args.timeout
                 )
