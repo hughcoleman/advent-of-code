@@ -28,8 +28,8 @@ def evolve(octopuses):
                         if (x + dx, y + dy) in octopuses.keys():
                             octopuses[x + dx, y + dy] += 1
 
-        for (x, y) in flashed:
-            octopuses[x, y] = 0
+    for (x, y) in flashed:
+        octopuses[x, y] = 0
 
     return len(flashed)
 
