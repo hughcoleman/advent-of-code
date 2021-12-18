@@ -23,7 +23,8 @@ print("Part 1:", sum(x > 1 for x in floor.values()))
 
 for (x1, y1), (x2, y2) in vents:
     if (x1 != x2) and (y1 != y2):
-        dx, dy = (1 if x2 > x1 else -1), (1 if y2 > y1 else -1)
+        dx = (x2 > x1) - (x1 > x2)
+        dy = (y2 > y1) - (y1 > y2)
         for d in range(abs(x2 - x1) + 1):
             floor[x1 + dx*d, y1 + dy*d] += 1
 
