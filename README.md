@@ -4,5 +4,5 @@
   <b>:christmas_tree:</b>
 </p>
 
-I'm somewhat competitive; I placed 282<sup>nd</sup> overall in 2019 and
-61<sup>st</sup> overall in 2020.
+I placed 282<sup>nd</sup> overall in 2019, 61<sup>st</sup> overall in 2020, and
+66<sup>th</sup> overall in 2021.
