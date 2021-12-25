@@ -38,13 +38,13 @@ def explode(n, depth=0):
 
         exploded, (l, r), child = explode(n.l, depth + 1)
         if exploded:
-            return True, (l, 0), Number(child, add_l(n.r, r))
+            return True, (l, None), Number(child, add_l(n.r, r) if r else n.r)
 
         exploded, (l, r), child = explode(n.r, depth + 1)
         if exploded:
-            return True, (0, r), Number(add_r(n.l, l), child)
+            return True, (None, r), Number(add_r(n.l, l) if l else n.l, child)
 
-    return False, (0, 0), n
+    return False, (None, None), n
 
 def split(n):
     if isinstance(n, int):
