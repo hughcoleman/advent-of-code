@@ -20,6 +20,33 @@ MOVE_COST = {
 
 STOPPABLE = [0, 1, 3, 5, 7, 9, 10]
 
+def deadlocked(rooms, hallway):
+    # Detect if a given state is "deadlocked" -- that is, cannot possibly lead
+    # to the winning state.
+    #
+    # This doesn't catch all deadlocking states; just the ones that are simple
+    # enough to hard-code.
+
+    return (
+        # Blocking each other?
+        (
+            (hallway[3] == "D" or hallway[5] == "D")
+            and (hallway[5] == "A" or hallway[7] == "A")
+        )
+        or (hallway[5] == "A" and hallway[3] == "C")
+        or (hallway[5] == "D" and hallway[7] == "B")
+
+        # Not enough room?
+        or (
+            hallway[3] == "A"
+            and sum(x is None for x in hallway[: 2]) < sum(x is not None and x != "A" for x in rooms[0])
+        )
+        or (
+            hallway[7] == "D"
+            and sum(x is None for x in hallway[-2:]) < sum(x is not None and x != "D" for x in rooms[3])
+        )
+    )
+
 def dijkstra(amphipods):
     Q = [
         (0, 0, (amphipods, (None, None, None, None, None, None, None, None, None, None, None)))
@@ -77,11 +104,12 @@ def dijkstra(amphipods):
                         for p_, h in enumerate(hallway)
                 )
 
-                hq.heappush(
-                    Q, (_cost, id(_rooms), (_rooms, _hallway))
-                )
+                if not deadlocked(_rooms, _hallway):
+                    hq.heappush(
+                        Q, (_cost, id(_rooms), (_rooms, _hallway))
+                    )
 
-        # Move an amphibian from the hallway into their room.
+        # Move an amphipod from the hallway into their room.
         for p in STOPPABLE:
             amphipod = hallway[p]
             if amphipod is None:
@@ -119,9 +147,10 @@ def dijkstra(amphipods):
                         for k, h in enumerate(hallway)
                 )
 
-                hq.heappush(
-                    Q, (_cost, id(_rooms), (_rooms, _hallway))
-                )
+                if not deadlocked(_rooms, _hallway):
+                    hq.heappush(
+                        Q, (_cost, id(_rooms), (_rooms, _hallway))
+                    )
 
 burrow = [
     list(ln) for ln in sys.stdin.read().strip().split("\n")
