@@ -1,2 +1,9 @@
-networkx==2.6.3
-z3-solver==4.8.13.0
+certifi==2022.9.24
+charset-normalizer==2.0.12
+decorator==4.4.2
+idna==3.4
+networkx==2.5.1
+pkg-resources==0.0.0
+requests==2.27.1
+urllib3==1.26.13
+z3-solver==4.11.2.0
