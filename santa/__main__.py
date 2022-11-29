@@ -102,14 +102,14 @@ def get_input(year, day, invalidate_cached_input=False):
                 if not token_fp.is_file():
                     continue
 
-                print(PREFIX_INFO, f"Reading token from '{token_fp}'.")
+                print(PREFIX_INFO, f"Reading token from `{token_fp}`.")
 
                 with token_fp.open(mode="r") as fh:
                     _token = fh.read()
 
                 break
             else:
-                print(PREFIX_ERR, "Couldn't locate token.")
+                print(PREFIX_ERR, "Failed to locate token.")
                 sys.exit(1)
 
         _token = _token.strip()
@@ -195,7 +195,7 @@ def run(fp, invalidate_cached_input=False, test=False, timeout=10):
         process = subprocess.run(
             # TODO: Properly "activate" the virtualenv.
             [
-                "./.venv/bin/python3", str(fp), "--test" if test else ""
+                "python3", str(fp), "--test" if test else ""
             ],
             input=inp_s,
             stdout=sys.stdout, # we need to see the output!
