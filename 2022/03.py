@@ -8,7 +8,7 @@ rucksacks = sys.stdin.read().strip().split("\n")
 
 def priority(x):
     x, = x
-    return (string.ascii_lowercase + string.ascii_uppercase).index(x) + 1
+    return string.ascii_letters.index(x) + 1
 
 print("Part 1:", sum(
     priority(set(rucksack[:len(rucksack) // 2]) & set(rucksack[len(rucksack) // 2:]))
