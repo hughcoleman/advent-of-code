@@ -4,5 +4,8 @@
   <b>:christmas_tree:</b>
 </p>
 
-I placed 282<sup>nd</sup> overall in 2019, 61<sup>st</sup> overall in 2020, and
-66<sup>th</sup> overall in 2021.
+I'm somewhat competitive.
+
+- 2019: 282nd overall, with 189 points.
+- 2020: 61st overall, with 984 (902) points.
+- 2021: 66th overall, with 959 points.
