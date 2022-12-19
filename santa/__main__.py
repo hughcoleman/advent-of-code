@@ -78,7 +78,7 @@ def get_input(year, day, invalidate_cached_input=False):
             )
 
             if waiting > 0:
-                print("\x1b[A", end="")
+                print("\x1b[A\x1b[K", end="")
             print(PREFIX_WARN,
                 f"Puzzle hasn't unlocked; {countdown} remaining."
             )
@@ -119,13 +119,13 @@ def get_input(year, day, invalidate_cached_input=False):
             f"https://adventofcode.com/{year}/day/{day}/input",
             headers={
                 "Cookie": f"session={_token};",
-                "User-Agent": "github.com/hughcoleman/advent-of-code",
+                "User-Agent": "github.com/hughcoleman/advent-of-code"
             }
         )
 
         assert response.status_code == 200
         _token = None # just a precaution
-
+        
         # Cache the input.
         fp.parent.mkdir(parents=True, exist_ok=True)
         with fp.open(mode="wb") as fh:
