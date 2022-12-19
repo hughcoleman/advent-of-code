@@ -119,7 +119,7 @@ def get_input(year, day, invalidate_cached_input=False):
             f"https://adventofcode.com/{year}/day/{day}/input",
             headers={
                 "Cookie": f"session={_token};",
-                "User-Agent": "github.com/hughcoleman/advent-of-code"
+                "User-Agent": "santa [github.com/hughcoleman/advent-of-code] by {}@{}.ca".format("htcolema", "uwaterloo")
             }
         )
 
