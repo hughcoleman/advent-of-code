@@ -4,13 +4,10 @@
 import sys
 
 def f(n):
-    return sum(
-        ("=-012".index(c) - 2) * 5**i
-            for i, c in enumerate(n.strip()[::-1])
-    )
+    return 5*f(n[:-1]) + "=-012".index(n[-1]) - 2 if n else 0
 
 def g(n):
-    return "" if n == 0 else g((n + 2) // 5) + "012=-"[n % 5]
+    return g((n + 2) // 5) + "012=-"[n % 5] if n else ""
 
-print("Part 1:", g(sum(map(f, sys.stdin.readlines()))))
+print("Part 1:", g(sum(map(f, sys.stdin.read().strip().split("\n")))))
 print("Part 2:", "Start The Blender")
