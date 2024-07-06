@@ -1,7 +1,7 @@
-certifi==2023.11.17
+certifi==2024.7.4
 charset-normalizer==3.3.2
-idna==3.6
-networkx==3.2.1
-requests==2.31.0
-urllib3==2.1.0
-z3-solver==4.12.2.0
+idna==3.7
+networkx==3.3
+requests==2.32.3
+urllib3==2.2.2
+z3-solver==4.13.0.0
