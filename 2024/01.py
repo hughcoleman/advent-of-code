@@ -1,3 +1,4 @@
+#!/usr/bin/env python3
 """ 2024/01: Historian Hysteria """
 
 import sys
