@@ -1,3 +1,4 @@
+#!/usr/bin/env python3
 """ 2024/02: Red-Nosed Reports """
 
 import sys
