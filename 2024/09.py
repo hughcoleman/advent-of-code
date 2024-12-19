@@ -33,16 +33,17 @@ print("Part 1:", p1)
 j = len(disk) - 1
 while j >= 0:
     if disk[j][1] is not None:
-        size = disk[j][0]
+        size, file_id = disk[j]
         try:
             i, gap = next(filter(
                 lambda t: t[0] < j and t[1][0] >= size and t[1][1] is None,
                 enumerate(disk)
             ))
+            disk[j] = (size, None)
             if gap[0] == size:
-                disk = disk[:i] + [ disk[j] ] + disk[i + 1:j] + [ (size, None) ] + disk[j + 1:]
+                disk[i] = (size, file_id)
             else:
-                disk = disk[:i] + [ disk[j], (gap[0] - size, None) ] + disk[i + 1:j] + [ (size, None) ] + disk[j + 1:]
+                disk = disk[:i] + [ (size, file_id), (gap[0] - size, None) ] + disk[i + 1:]
                 continue
         except StopIteration: # ...so, no sufficiently large gap.
             pass
