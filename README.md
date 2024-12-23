@@ -1,10 +1,6 @@
-<h3 align="center">advent-of-code</h3>
+# advent-of-code :christmas_tree:
 
-<p align="center">
-  <b>:christmas_tree:</b>
-</p>
-
-I'm somewhat competitive.
+I used to be quite competitive, but have found myself busier lately.
 
 - 2019: 282nd overall, with 189 points.
 - 2020: 61st overall, with 984 (902) points.
@@ -13,7 +9,7 @@ I'm somewhat competitive.
 
 #### santa
 
-`santa` is a command-line tool for managing AoC puzzle-solving scripts. It handles downloading and [caching](https://www.reddit.com/r/adventofcode/wiki/faqs/automation#wiki_cache_your_inputs_after_initial_download) inputs, as well as providing each script with appropriate input (so long as each script declares its corresponding puzzle in a docstring.)
+`santa` is a command-line tool for managing Advent of Code puzzle-solving scripts. It handles downloading and [caching](https://www.reddit.com/r/adventofcode/wiki/faqs/automation#wiki_cache_your_inputs_after_initial_download) inputs, as well as providing each script with appropriate input (so long as each script declares its corresponding puzzle in a docstring).
 
 To see it in action, try:
 
