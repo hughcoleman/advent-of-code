@@ -23,7 +23,8 @@ while ip < len(program):
     ip = ip + 2
 print("Part 1:", ",".join(map(str, out)))
 
-# For Part 2, we'll use z3.
+# For Part 2, we'll use z3. This is currently hard-coded to my input; it would
+# be nice to generalise it at some point.
 o = Optimize()
 i = BitVec("i", 64)
 o.minimize(i)
