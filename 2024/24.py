@@ -35,7 +35,7 @@ def evaluator(inputs, swaps = {}):
     return _eval
 
 e = evaluator(inputs)
-print("Part 1:", 
+print("Part 1:",
     ft.reduce(
         lambda acc, g: acc + (1 << int(g.removeprefix("z"))) * e(g),
         filter(lambda g: g.startswith("z"), gates.keys()),
@@ -47,7 +47,7 @@ print("Part 1:",
 # can find this by asking z3, for each bit i, if there exists x, y, and z such
 # that x + y == z but z[i] != e(z[i]).
 def find_smallest_error(swaps = {}):
-    x, y, z = BitVecs("x y z", 45)
+    x, y, z = BitVecs(["x", "y", "z"], 46)
     inputs_x = {
         f"x{i:02d}": Extract(i, i, x) for i in range(45)
     }
@@ -73,7 +73,7 @@ def descendants(register, swaps = {}):
         yield register
         if register in swaps.keys():
             register = swaps[register]
-            yield register 
+            yield register
 
         arg1, _, arg2 = gates[register]
         yield from descendants(arg1)
@@ -85,16 +85,22 @@ def descendants(register, swaps = {}):
 # least one of the registers that z[i0] depends on is necessarily incorrect.
 def find_swap(i0, swaps = {}):
     is_correct = set(descendants(f"z{i0 - 1:02d}", swaps=swaps))
-    for c1, c2 in it.product(
-        descendants(f"z{i0:02d}", swaps=swaps),
-        descendants(f"z45"      , swaps=swaps),
-    ):
-        if c1 in is_correct or c2 in is_correct or c1 in descendants(c2, swaps=swaps):
-            continue
 
-        s = swaps | { c1: c2, c2: c1 }
-        i = find_smallest_error(s)
-        if i > i0:
-            find_swap(i, s)
+    # The Advent of Code inputs always perform local swaps, so to optimise for
+    # this, we'll begin by testing gates closer to z[i0] before working upward.
+    tried = set()
+    for i1 in range(i0 + 1, 46):
+        for c1, c2 in it.product(
+            set(descendants(f"z{i0:02d}", swaps=swaps)) - is_correct,
+            set(descendants(f"z{i1:02d}", swaps=swaps)) - is_correct,
+        ):
+            if (c1, c2) in tried or c1 in descendants(c2, swaps=swaps):
+                continue
+            tried.add((c1, c2))
+
+            s = swaps | { c1: c2, c2: c1 }
+            i = find_smallest_error(s)
+            if i > i0:
+                find_swap(i, s)
 
 find_swap(find_smallest_error())
