@@ -28,7 +28,11 @@ except ModuleNotFoundError:
 
 parser = argparse.ArgumentParser(prog="santa",
     description="A little helper for solving Advent of Code puzzles.")
-subparsers = parser.add_subparsers()
+subparsers = parser.add_subparsers(dest="command")
+
+subparser_new = subparsers.add_parser("new", help="create a script")
+subparser_new.add_argument("date")
+subparser_new.add_argument("name")
 
 subparser_run = subparsers.add_parser("run", help="run a script")
 subparser_run.add_argument("script", nargs="?", default=None)
@@ -209,31 +213,47 @@ def run(fp, invalidate_cached_input=False, test=False, timeout=10):
 if __name__ == "__main__":
     args = parser.parse_args()
 
-    # Locate the script.
-    if args.script is None:
-        run(
-            pathlib.Path.cwd() / "main.py",
-            invalidate_cached_input=args.invalidate_cached_input,
-            test=args.test,
-            timeout=args.timeout
-        )
+    if args.command == "new":
+        fp = pathlib.Path(f"{args.date}.py")
+        if fp.is_file():
+            print(PREFIX_ERR, f"The file {fp} already exists.")
+            sys.exit(1)
 
-    else:
-        for p in sorted(pathlib.Path.cwd().glob(f"{args.script}*")):
-            if p.is_dir():
-                # Run all scripts in the directory.
-                for fp in sorted(p.glob("*.py")):
+        # Create the file, and load it with some template content.
+        fp.parent.mkdir(parents=True, exist_ok=True)
+        with fp.open(mode="w") as fh:
+            fh.write("#!/usr/bin/env python3\n")
+            fh.write(f"\"\"\" {args.date}: {args.name} \"\"\"\n")
+            fh.write("\n")
+            fh.write("\n")
+
+        fp.chmod(0o755)
+    elif args.command == "run":
+        # Locate the script.
+        if args.script is None:
+            run(
+                pathlib.Path.cwd() / "main.py",
+                invalidate_cached_input=args.invalidate_cached_input,
+                test=args.test,
+                timeout=args.timeout
+            )
+
+        else:
+            for p in sorted(pathlib.Path.cwd().glob(f"{args.script}*")):
+                if p.is_dir():
+                    # Run all scripts in the directory.
+                    for fp in sorted(p.glob("*.py")):
+                        run(
+                            fp,
+                            invalidate_cached_input=args.invalidate_cached_input,
+                            test=args.test,
+                            timeout=args.timeout
+                        )
+                elif p.is_file():
+                    # Run script.
                     run(
-                        fp,
+                        p,
                         invalidate_cached_input=args.invalidate_cached_input,
                         test=args.test,
                         timeout=args.timeout
                     )
-            elif p.is_file():
-                # Run script.
-                run(
-                    p,
-                    invalidate_cached_input=args.invalidate_cached_input,
-                    test=args.test,
-                    timeout=args.timeout
-                )
