@@ -197,9 +197,8 @@ def run(fp, invalidate_cached_input=False, test=False, timeout=10):
 
     try:
         process = subprocess.run(
-            # TODO: Properly "activate" the virtualenv.
             [
-                "python3", str(fp), "--test" if test else ""
+                "uv", "run", str(fp), "--test" if test else ""
             ],
             input=inp_s,
             stdout=sys.stdout, # we need to see the output!
