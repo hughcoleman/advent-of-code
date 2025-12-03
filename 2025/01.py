@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 """ 2025/01: Secret Entrance """
 
+import itertools as it
 import sys
 
 rotations = [
@@ -8,10 +9,9 @@ rotations = [
         for ln in sys.stdin.readlines()
 ]
 
-p = 50
 print("Part 1:", sum(
-    (p := (p + d) % 100) == 0
-        for d in rotations
+    p % 100 == 0
+        for p in it.accumulate([50] + rotations)
 ))
 
 p = 50
