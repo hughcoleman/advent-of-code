@@ -2,7 +2,7 @@
 """ 2025/07: Laboratories """
 
 import collections as cl
-import itertools as it
+import functools as ft
 import sys
 
 manifold = [
@@ -25,6 +25,6 @@ def f(beams, splitters):
             beams_[i] = beams_[i] + beams[i]
     return beams_
 
-*_, q = it.accumulate(manifold, f, initial=cl.defaultdict(int))
+q = ft.reduce(f, manifold, cl.defaultdict(int))
 print("Part 1:", p1)
 print("Part 2:", sum(q.values()))
